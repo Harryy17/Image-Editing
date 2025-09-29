@@ -1,4 +1,4 @@
-# ImageEdit Pro - Professional Web-Based Image Editing Platform
+# PixelCraft Studio- Professional Web-Based Image Editing Platform
 
 ![Python](https://img.shields.io/badge/python-v3.8+-blue.svg)
 ![Flask](https://img.shields.io/badge/flask-v2.0+-green.svg)
