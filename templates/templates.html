@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+{% block title %}Professional Templates - ImageEdit Pro{% endblock %}
+{% block content %}
+<div class="text-center mb-5">
+    <h2 class="display-5 fw-bold text-primary mb-3">Professional Templates</h2>
+    <p class="lead">Choose from our curated collection of high-quality design templates</p>
+</div>
+
+<!-- Filter Tabs -->
+<div class="mb-4">
+    <ul class="nav nav-pills justify-content-center" id="templateTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="all-tab" data-bs-toggle="pill" data-bs-target="#all" type="button">All Templates</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="business-tab" data-bs-toggle="pill" data-bs-target="#business" type="button">Business</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="portfolio-tab" data-bs-toggle="pill" data-bs-target="#portfolio" type="button">Portfolio</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="minimalist-tab" data-bs-toggle="pill" data-bs-target="#minimalist" type="button">Minimalist</button>
+        </li>
+    </ul>
+</div>
+
+<!-- Template Grid -->
+<div class="row g-4 mb-5" id="templatesGrid">
+    <!-- Business Template -->
+    <div class="col-lg-6 col-md-6">
+        <div class="card h-100 template-card" data-category="business">
+            <div class="position-relative overflow-hidden template-image-container">
+                <div class="template-preview business-template">
+                    <div class="template-content">
+                        <div class="business-header">
+                            <h3>COMPANY NAME</h3>
+                            <p>Professional Excellence</p>
+                        </div>
+                        <div class="business-body">
+                            <div class="business-section">
+                                <h4>About Us</h4>
+                                <div class="business-text-lines">
+                                    <div class="text-line"></div>
+                                    <div class="text-line"></div>
+                                    <div class="text-line short"></div>
+                                </div>
+                            </div>
+                            <div class="business-section">
+                                <h4>Services</h4>
+                                <div class="service-grid">
+                                    <div class="service-box"></div>
+                                    <div class="service-box"></div>
+                                    <div class="service-box"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="position-absolute top-0 end-0 m-3">
+                    <span class="badge bg-primary">Business</span>
+                </div>
+            </div>
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title fw-bold">Professional Business Template</h5>
+                <p class="card-text text-muted flex-grow-1">Clean and professional layout perfect for corporate presentations, business cards, and marketing materials.</p>
+                <div class="d-flex gap-2 mt-3">
+                    {% if current_user.is_authenticated %}
+                    <button class="btn btn-primary flex-fill" onclick="useTemplate('business')">
+                        <i class="fas fa-edit me-2"></i>Use Template
+                    </button>
+                    {% else %}
+                    <a href="/login" class="btn btn-outline-primary flex-fill">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login to Use
+                    </a>
+                    {% endif %}
+                    <button class="btn btn-outline-secondary" onclick="previewTemplate('business')">
+                        <i class="fas fa-eye me-2"></i>Preview
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Portfolio Template -->
+    <div class="col-lg-6 col-md-6">
+        <div class="card h-100 template-card" data-category="portfolio">
+            <div class="position-relative overflow-hidden template-image-container">
+                <div class="template-preview portfolio-template">
+                    <div class="template-content">
+                        <div class="portfolio-header">
+                            <div class="portfolio-avatar"></div>
+                            <h3>Creative Portfolio</h3>
+                            <p>Designer & Artist</p>
+                        </div>
+                        <div class="portfolio-gallery">
+                            <div class="gallery-item"></div>
+                            <div class="gallery-item"></div>
+                            <div class="gallery-item"></div>
+                            <div class="gallery-item"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="position-absolute top-0 end-0 m-3">
+                    <span class="badge bg-info">Portfolio</span>
+                </div>
+            </div>
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title fw-bold">Creative Portfolio Template</h5>
+                <p class="card-text text-muted flex-grow-1">Modern creative design ideal for showcasing artistic work, photography, and creative projects.</p>
+                <div class="d-flex gap-2 mt-3">
+                    {% if current_user.is_authenticated %}
+                    <button class="btn btn-primary flex-fill" onclick="useTemplate('portfolio')">
+                        <i class="fas fa-edit me-2"></i>Use Template
+                    </button>
+                    {% else %}
+                    <a href="/login" class="btn btn-outline-primary flex-fill">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login to Use
+                    </a>
+                    {% endif %}
+                    <button class="btn btn-outline-secondary" onclick="previewTemplate('portfolio')">
+                        <i class="fas fa-eye me-2"></i>Preview
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Minimalist Template -->
+    <div class="col-lg-6 col-md-6">
+        <div class="card h-100 template-card" data-category="minimalist">
+            <div class="position-relative overflow-hidden template-image-container">
+                <div class="template-preview minimalist-template">
+                    <div class="template-content">
+                        <div class="minimalist-header">
+                            <h3>Minimal Design</h3>
+                            <div class="minimalist-line"></div>
+                        </div>
+                        <div class="minimalist-body">
+                            <div class="minimalist-text">
+                                <div class="text-block"></div>
+                                <div class="text-block"></div>
+                            </div>
+                            <div class="minimalist-image"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="position-absolute top-0 end-0 m-3">
+                    <span class="badge bg-secondary">Minimalist</span>
+                </div>
+            </div>
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title fw-bold">Minimalist Design Template</h5>
+                <p class="card-text text-muted flex-grow-1">Clean, simple design focusing on content with plenty of white space and elegant typography.</p>
+                <div class="d-flex gap-2 mt-3">
+                    {% if current_user.is_authenticated %}
+                    <button class="btn btn-primary flex-fill" onclick="useTemplate('minimalist')">
+                        <i class="fas fa-edit me-2"></i>Use Template
+                    </button>
+                    {% else %}
+                    <a href="/login" class="btn btn-outline-primary flex-fill">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login to Use
+                    </a>
+                    {% endif %}
+                    <button class="btn btn-outline-secondary" onclick="previewTemplate('minimalist')">
+                        <i class="fas fa-eye me-2"></i>Preview
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- E-commerce Template -->
+    <div class="col-lg-6 col-md-6">
+        <div class="card h-100 template-card" data-category="ecommerce">
+            <div class="position-relative overflow-hidden template-image-container">
+                <div class="template-preview ecommerce-template">
+                    <div class="template-content">
+                        <div class="ecommerce-header">
+                            <h3>STORE</h3>
+                            <div class="search-bar"></div>
+                        </div>
+                        <div class="product-grid">
+                            <div class="product-item">
+                                <div class="product-image"></div>
+                                <div class="product-info">
+                                    <div class="product-name"></div>
+                                    <div class="product-price"></div>
+                                </div>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-image"></div>
+                                <div class="product-info">
+                                    <div class="product-name"></div>
+                                    <div class="product-price"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="position-absolute top-0 end-0 m-3">
+                    <span class="badge bg-success">E-commerce</span>
+                </div>
+            </div>
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title fw-bold">E-commerce Product Template</h5>
+                <p class="card-text text-muted flex-grow-1">Perfect for product showcases, online stores, and commercial presentations with focus on products.</p>
+                <div class="d-flex gap-2 mt-3">
+                    {% if current_user.is_authenticated %}
+                    <button class="btn btn-primary flex-fill" onclick="useTemplate('ecommerce')">
+                        <i class="fas fa-edit me-2"></i>Use Template
+                    </button>
+                    {% else %}
+                    <a href="/login" class="btn btn-outline-primary flex-fill">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login to Use
+                    </a>
+                    {% endif %}
+                    <button class="btn btn-outline-secondary" onclick="previewTemplate('ecommerce')">
+                        <i class="fas fa-eye me-2"></i>Preview
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function useTemplate(templateType) {
+    window.location.href = `/editor?template=${templateType}`;
+}
+
+function previewTemplate(templateType) {
+    // Create modal for preview
+    const modal = document.createElement('div');
+    modal.className = 'modal fade';
+    modal.innerHTML = `
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Template Preview - ${templateType}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="template-preview-large ${templateType}-template">
+                        <!-- Template content will be dynamically added -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    new bootstrap.Modal(modal).show();
+}
+
+// Filter functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('#templateTabs button');
+    const cards = document.querySelectorAll('.template-card');
+    
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const category = this.id.replace('-tab', '');
+            
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.parentElement.style.display = 'block';
+                } else {
+                    card.parentElement.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

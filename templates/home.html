@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}ImageEdit Pro - Professional Image Editing Platform{% endblock %}
+{% block content %}
+<div class="hero-section">
+    <h1 class="display-4 text-primary">ImageEdit Pro</h1>
+    <p class="lead">Professional-grade image editing tools designed for modern creators and businesses.</p>
+    
+    <div class="button-group">
+        {% if current_user.is_authenticated %}
+            <a href="/editor" class="btn btn-primary btn-lg">
+                <i class="fas fa-edit me-2"></i>Start Editing
+            </a>
+            <a href="/templates" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-images me-2"></i>Browse Templates
+            </a>
+        {% else %}
+            <a href="/signup" class="btn btn-primary btn-lg">
+                <i class="fas fa-rocket me-2"></i>Get Started Free
+            </a>
+            <a href="/login" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-sign-in-alt me-2"></i>Sign In
+            </a>
+            <a href="/templates" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-images me-2"></i>Browse Templates
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="features-section">
+    <h3>Why Choose ImageEdit Pro?</h3>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <i class="fas fa-bolt feature-icon lightning"></i>
+                    <h5 class="card-title">Lightning Fast</h5>
+                    <p class="card-text">Process images instantly with our optimized editing engine built for speed and efficiency.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <i class="fas fa-shield-alt feature-icon shield"></i>
+                    <h5 class="card-title">Secure & Private</h5>
+                    <p class="card-text">Your images are processed securely with enterprise-grade encryption and privacy protection.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <i class="fas fa-magic feature-icon magic"></i>
+                    <h5 class="card-title">Professional Tools</h5>
+                    <p class="card-text">Access comprehensive editing features including filters, effects, and advanced adjustments.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Section -->
+<div class="stats-section">
+    <div class="row g-4">
+        <div class="col-md-3">
+            <h3 class="text-primary">50K+</h3>
+            <p class="text-muted">Images Processed</p>
+        </div>
+        <div class="col-md-3">
+            <h3 class="text-primary">1000+</h3>
+            <p class="text-muted">Active Users</p>
+        </div>
+        <div class="col-md-3">
+            <h3 class="text-primary">25+</h3>
+            <p class="text-muted">Editing Tools</p>
+        </div>
+        <div class="col-md-3">
+            <h3 class="text-primary">99.9%</h3>
+            <p class="text-muted">Uptime</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

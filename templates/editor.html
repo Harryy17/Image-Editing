@@ -1,0 +1,390 @@
+{% extends "base.html" %}
+{% block title %}Advanced Image Editor{% endblock %}
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card glass-effect h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4><i class="fas fa-edit me-2"></i>Image Editor</h4>
+                <div class="btn-group" role="group">
+                    <button class="btn btn-sm btn-outline-primary" onclick="resetImage()">
+                        <i class="fas fa-undo me-1"></i>Reset
+                    </button>
+                    <button class="btn btn-sm btn-outline-success" onclick="saveImage()">
+                        <i class="fas fa-save me-1"></i>Save
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- File Upload -->
+                <div class="mb-4">
+                    <label for="imageUpload" class="form-label">Choose Image</label>
+                    <input type="file" class="form-control" id="imageUpload" accept="image/*">
+                </div>
+                
+                <!-- Image Preview -->
+                <div class="text-center mb-4 position-relative">
+                    <div id="imageContainer" style="min-height: 400px; border: 2px dashed var(--border-color); border-radius: var(--border-radius-lg); background: rgba(51, 65, 85, 0.1); display: flex; align-items: center; justify-content: center;">
+                        <img id="imagePreview" src="" alt="Upload an image to start editing" style="max-width: 100%; max-height: 500px; object-fit: contain; border-radius: var(--border-radius); display: none;">
+                        <div id="uploadPrompt" class="text-muted">
+                            <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
+                            <p>Upload an image to start editing</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Download Button -->
+                <div class="text-center">
+                    <button id="downloadBtn" class="btn btn-success btn-lg" style="display: none;">
+                        <i class="fas fa-download me-2"></i>Download Edited Image
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card glass-effect">
+            <div class="card-header">
+                <h5><i class="fas fa-sliders-h me-2"></i>Edit Controls</h5>
+            </div>
+            <div class="card-body">
+                <!-- Tabs for different control categories -->
+                <ul class="nav nav-pills nav-fill mb-3" id="editTabs" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active" id="basic-tab" data-bs-toggle="pill" data-bs-target="#basic" type="button">Basic</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="filters-tab" data-bs-toggle="pill" data-bs-target="#filters" type="button">Filters</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="advanced-tab" data-bs-toggle="pill" data-bs-target="#advanced" type="button">Advanced</button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content" id="editTabsContent">
+                    <!-- Basic Controls -->
+                    <div class="tab-pane fade show active" id="basic" role="tabpanel">
+                        <!-- Rotate -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Rotate</label>
+                            <div class="btn-group w-100 mb-2" role="group">
+                                <button class="btn btn-outline-primary" onclick="editImage('rotate', 90)">90°</button>
+                                <button class="btn btn-outline-primary" onclick="editImage('rotate', 180)">180°</button>
+                                <button class="btn btn-outline-primary" onclick="editImage('rotate', 270)">270°</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Flip -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Flip</label>
+                            <div class="btn-group w-100 mb-2" role="group">
+                                <button class="btn btn-outline-secondary" onclick="editImage('flip_horizontal', '')">
+                                    <i class="fas fa-arrows-alt-h me-1"></i>Horizontal
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="editImage('flip_vertical', '')">
+                                    <i class="fas fa-arrows-alt-v me-1"></i>Vertical
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Brightness -->
+                        <div class="mb-4">
+                            <label for="brightnessSlider" class="form-label fw-bold">Brightness</label>
+                            <input type="range" class="form-range" id="brightnessSlider" min="0.1" max="2" step="0.1" value="1">
+                            <div class="d-flex justify-content-between small text-muted">
+                                <span>Dark</span><span>Normal</span><span>Bright</span>
+                            </div>
+                            <button class="btn btn-sm btn-primary mt-2 w-100" onclick="applySlider('brightness')">Apply Brightness</button>
+                        </div>
+                        
+                        <!-- Contrast -->
+                        <div class="mb-4">
+                            <label for="contrastSlider" class="form-label fw-bold">Contrast</label>
+                            <input type="range" class="form-range" id="contrastSlider" min="0.1" max="2" step="0.1" value="1">
+                            <button class="btn btn-sm btn-primary mt-2 w-100" onclick="applySlider('contrast')">Apply Contrast</button>
+                        </div>
+                        
+                        <!-- Saturation -->
+                        <div class="mb-4">
+                            <label for="saturationSlider" class="form-label fw-bold">Saturation</label>
+                            <input type="range" class="form-range" id="saturationSlider" min="0" max="2" step="0.1" value="1">
+                            <button class="btn btn-sm btn-primary mt-2 w-100" onclick="applySlider('saturation')">Apply Saturation</button>
+                        </div>
+                        
+                        <!-- Sharpness -->
+                        <div class="mb-4">
+                            <label for="sharpnessSlider" class="form-label fw-bold">Sharpness</label>
+                            <input type="range" class="form-range" id="sharpnessSlider" min="0" max="3" step="0.1" value="1">
+                            <button class="btn btn-sm btn-primary mt-2 w-100" onclick="applySlider('sharpness')">Apply Sharpness</button>
+                        </div>
+                        
+                        <!-- Resize -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Resize</label>
+                            <select class="form-select mb-2" id="resizeSelect">
+                                <option value="800x600">800 × 600</option>
+                                <option value="1024x768">1024 × 768</option>
+                                <option value="1280x720">1280 × 720 (HD)</option>
+                                <option value="1920x1080">1920 × 1080 (Full HD)</option>
+                                <option value="2560x1440">2560 × 1440 (2K)</option>
+                            </select>
+                            <button class="btn btn-primary w-100" onclick="applyResize()">Resize Image</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Filters Tab -->
+                    <div class="tab-pane fade" id="filters" role="tabpanel">
+                        <!-- Color Filters -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Color Effects</label>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-secondary" onclick="editImage('grayscale', '')">
+                                    <i class="fas fa-adjust me-2"></i>Grayscale
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="editImage('sepia', '')">
+                                    <i class="fas fa-image me-2"></i>Sepia
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="editImage('invert', '')">
+                                    <i class="fas fa-exchange-alt me-2"></i>Invert Colors
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Artistic Filters -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Artistic Effects</label>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-secondary" onclick="editImage('emboss', '')">
+                                    <i class="fas fa-mountain me-2"></i>Emboss
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="editImage('find_edges', '')">
+                                    <i class="fas fa-border-style me-2"></i>Find Edges
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="editImage('contour', '')">
+                                    <i class="fas fa-draw-polygon me-2"></i>Contour
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Enhancement Filters -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Enhancement</label>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-secondary" onclick="editImage('edge_enhance', '')">
+                                    <i class="fas fa-magic me-2"></i>Edge Enhance
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="editImage('edge_enhance_more', '')">
+                                    <i class="fas fa-star me-2"></i>Edge Enhance More
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="editImage('detail', '')">
+                                    <i class="fas fa-search-plus me-2"></i>Detail
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="editImage('sharpen', '')">
+                                    <i class="fas fa-crosshairs me-2"></i>Sharpen
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Blur Effects -->
+                        <div class="mb-4">
+                            <label for="blurSlider" class="form-label fw-bold">Blur Effects</label>
+                            <input type="range" class="form-range" id="blurSlider" min="0" max="10" step="0.5" value="0">
+                            <div class="d-grid gap-2 mt-2">
+                                <button class="btn btn-sm btn-primary" onclick="applySlider('blur')">Apply Blur</button>
+                                <button class="btn btn-outline-secondary" onclick="editImage('smooth', '')">Smooth</button>
+                                <button class="btn btn-outline-secondary" onclick="editImage('smooth_more', '')">Smooth More</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Advanced Tab -->
+                    <div class="tab-pane fade" id="advanced" role="tabpanel">
+                        <!-- Auto Adjustments -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Auto Adjustments</label>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-success" onclick="editImage('auto_contrast', '')">
+                                    <i class="fas fa-magic me-2"></i>Auto Contrast
+                                </button>
+                                <button class="btn btn-outline-success" onclick="editImage('equalize', '')">
+                                    <i class="fas fa-balance-scale me-2"></i>Equalize
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Advanced Filters -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Advanced Effects</label>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-warning" onclick="editImage('unsharp_mask', '')">
+                                    <i class="fas fa-mask me-2"></i>Unsharp Mask
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Posterize -->
+                        <div class="mb-4">
+                            <label for="posterizeSlider" class="form-label fw-bold">Posterize</label>
+                            <input type="range" class="form-range" id="posterizeSlider" min="2" max="8" step="1" value="4">
+                            <button class="btn btn-sm btn-primary mt-2 w-100" onclick="applySlider('posterize')">Apply Posterize</button>
+                        </div>
+                        
+                        <!-- Solarize -->
+                        <div class="mb-4">
+                            <label for="solarizeSlider" class="form-label fw-bold">Solarize</label>
+                            <input type="range" class="form-range" id="solarizeSlider" min="0" max="255" step="10" value="128">
+                            <button class="btn btn-sm btn-primary mt-2 w-100" onclick="applySlider('solarize')">Apply Solarize</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentFilename = '';
+let editedFilename = '';
+let originalImage = '';
+
+document.getElementById('imageUpload').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        // Show loading state
+        showLoading();
+        
+        fetch('/upload_image', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            hideLoading();
+            if (data.success) {
+                currentFilename = data.filename;
+                originalImage = `/static/uploads/${data.filename}`;
+                document.getElementById('imagePreview').src = originalImage;
+                document.getElementById('imagePreview').style.display = 'block';
+                document.getElementById('uploadPrompt').style.display = 'none';
+            } else {
+                showAlert('Upload failed: ' + data.error, 'danger');
+            }
+        })
+        .catch(error => {
+            hideLoading();
+            showAlert('Upload error: ' + error.message, 'danger');
+        });
+    }
+});
+
+function editImage(operation, value) {
+    if (!currentFilename) {
+        showAlert('Please upload an image first', 'warning');
+        return;
+    }
+    
+    showLoading();
+    
+    fetch('/edit_image', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            filename: currentFilename,
+            operation: operation,
+            value: value
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        hideLoading();
+        if (data.success) {
+            document.getElementById('imagePreview').src = data.preview;
+            editedFilename = data.edited_filename;
+            document.getElementById('downloadBtn').style.display = 'block';
+            showAlert('Effect applied successfully!', 'success');
+        } else {
+            showAlert('Edit failed: ' + data.error, 'danger');
+        }
+    })
+    .catch(error => {
+        hideLoading();
+        showAlert('Edit error: ' + error.message, 'danger');
+    });
+}
+
+function applySlider(type) {
+    const value = document.getElementById(type + 'Slider').value;
+    editImage(type, value);
+}
+
+function applyResize() {
+    const value = document.getElementById('resizeSelect').value;
+    editImage('resize', value);
+}
+
+function resetImage() {
+    if (originalImage) {
+        document.getElementById('imagePreview').src = originalImage;
+        document.getElementById('downloadBtn').style.display = 'none';
+        
+        // Reset all sliders
+        document.getElementById('brightnessSlider').value = 1;
+        document.getElementById('contrastSlider').value = 1;
+        document.getElementById('saturationSlider').value = 1;
+        document.getElementById('sharpnessSlider').value = 1;
+        document.getElementById('blurSlider').value = 0;
+        document.getElementById('posterizeSlider').value = 4;
+        document.getElementById('solarizeSlider').value = 128;
+        
+        showAlert('Image reset to original', 'info');
+    }
+}
+
+function saveImage() {
+    if (editedFilename) {
+        window.location.href = `/static/uploads/${editedFilename}`;
+    } else {
+        showAlert('No edited image to save', 'warning');
+    }
+}
+
+document.getElementById('downloadBtn').addEventListener('click', function() {
+    saveImage();
+});
+
+function showLoading() {
+    // Add loading overlay or spinner
+    document.body.style.cursor = 'wait';
+}
+
+function hideLoading() {
+    document.body.style.cursor = 'default';
+}
+
+function showAlert(message, type) {
+    // Create and show Bootstrap alert
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    const container = document.querySelector('.container');
+    container.insertBefore(alertDiv, container.firstChild);
+    
+    // Auto-dismiss after 3 seconds
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.remove();
+        }
+    }, 3000);
+}
+</script>
+{% endblock %}
